@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-card,
+.table-card {
+  padding: 16px;
+}
+
+.form-content {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+mat-form-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.table-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search-field {
+  max-width: 400px;
+  width: 100%;
+}
+
+.table-card {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.empty-message {
+  padding: 24px;
+  text-align: center;
+  color: #757575;
+  font-style: italic;
+}
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ /* .container {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+ }
+ 
+ .form-card {
+   padding: 16px;
+ }
+ 
+ .form-content {
+   display: flex;
+   gap: 16px;
+   align-items: center;
+   flex-wrap: wrap;
+   margin-top: 16px;
+ }
+ 
+ mat-form-field {
+   flex: 1;
+   min-width: 250px;
+ }
+ 
+ .form-actions {
+   display: flex;
+   gap: 8px;
+ }
+ 
+ .table-card {
+   overflow-x: auto;
+ }
+ 
+ table {
+   width: 100%;
+ } */
+
+ 
+ 
