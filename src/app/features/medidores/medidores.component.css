@@ -1,0 +1,32 @@
+.container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.card-formulario, .card-tabela {
+  width: 100%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  align-items: center;
+}
+
+.acoes-form {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.busca {
+  width: 40%;
+  margin-bottom: 16px;
+}
+
+table {
+  width: 100%;
+}

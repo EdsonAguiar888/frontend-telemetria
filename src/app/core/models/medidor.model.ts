@@ -17,7 +17,7 @@ export interface Medidor {
   id?: string;
   identificador: string;
   tipo: TipoMedidor;
-  imovelId?: string;
+  imovelId: string;
   imovel?: Imovel;
   leituras?: Leitura[];
 }

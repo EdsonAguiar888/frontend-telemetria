@@ -1,0 +1,105 @@
+<div class="container">
+  <h2>Gerenciamento de Medidores</h2>
+
+  <mat-card class="card-formulario">
+    <mat-card-header>
+      <mat-card-title>
+        {{ medidorEditandoId ? 'Editar Medidor' : 'Novo Medidor' }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="salvar()" class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Identificador</mat-label>
+          <input
+            matInput
+            [(ngModel)]="novoMedidor.identificador"
+            name="identificador"
+            placeholder="Ex: MED-AGUA-101"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de Consumo</mat-label>
+          <mat-select [(ngModel)]="novoMedidor.tipo" name="tipo" required>
+            <mat-option *ngFor="let option of tiposMedidor" [value]="option.valor">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Imóvel Vinculado</mat-label>
+          <mat-select [(ngModel)]="novoMedidor.imovelId" name="imovelId" required>
+            <mat-option *ngFor="let imovel of imoveis" [value]="imovel.id">
+              {{ imovel.nome }} - {{ imovel.endereco }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="acoes-form">
+          <button mat-raised-button color="primary" type="submit">
+            {{ medidorEditandoId ? 'Atualizar' : 'Salvar Medidor' }}
+          </button>
+          <button
+            mat-button
+            type="button"
+            *ngIf="medidorEditandoId"
+            (click)="limparFormulario()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card-tabela">
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="busca">
+        <mat-label>Buscar medidor</mat-label>
+        <input
+          matInput
+          [(ngModel)]="filtro"
+          (keyup)="aplicarFiltro()"
+          placeholder="Filtre por identificador ou tipo"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <table mat-table [dataSource]="medidoresFiltrados" class="mat-elevation-z2">
+        <ng-container matColumnDef="identificador">
+          <th mat-header-cell *matHeaderCellDef>Identificador</th>
+          <td mat-cell *matCellDef="let m">{{ m.identificador }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let m">{{ m.tipo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="imovel">
+          <th mat-header-cell *matHeaderCellDef>Imóvel</th>
+          <td mat-cell *matCellDef="let m">{{ getNomeImovel(m) }}</td>
+          <!-- <td mat-cell *matCellDef="let m">{{ getNomeImovel(m.imovelId) }}</td> -->
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let m">
+            <button mat-icon-button color="primary" (click)="editar(m)" title="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="excluir(m.id!)" title="Excluir">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -33,13 +33,20 @@
 
   <mat-card class="table-card">
     <mat-card-content class="table-content">
-      <div class="filter-header">
+
+      <mat-form-field appearance="outline" class="busca">
+        <mat-label>Buscar imóvel por nome ou endereço</mat-label>
+        <input matInput [(ngModel)]="filtro" (keyup)="aplicarFiltro()" placeholder="Digite para filtrar..." />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      
+      <!-- <div class="filter-header">
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Buscar imóvel por nome ou endereço</mat-label>
           <input matInput [(ngModel)]="filtro" (keyup)="aplicarFiltro()" placeholder="Digite para filtrar..." />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
-      </div>
+      </div> -->
 
       <table mat-table [dataSource]="imoveisFiltrados" class="mat-elevation-z1">
         <ng-container matColumnDef="nome">
