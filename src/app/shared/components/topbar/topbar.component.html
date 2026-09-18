@@ -1,0 +1,44 @@
+<mat-toolbar color="primary" class="topbar mat-elevation-z4">
+  <div class="brand">
+    <mat-icon class="brand-icon">analytics</mat-icon>
+    <span class="brand-title">{{ tituloSistema }}</span>
+  </div>
+
+  <nav class="nav-links">
+    <a
+      mat-button
+      routerLink="/imoveis"
+      routerLinkActive="active-link"
+    >
+      <mat-icon>holiday_village</mat-icon>
+      <span>Imóveis</span>
+    </a>
+
+    <a
+      mat-button
+      routerLink="/medidores"
+      routerLinkActive="active-link"
+    >
+      <mat-icon>speed</mat-icon>
+      <span>Medidores</span>
+    </a>
+
+    <a
+      mat-button
+      routerLink="/leituras"
+      routerLinkActive="active-link"
+    >
+      <mat-icon>bar_chart</mat-icon>
+      <span>Leituras</span>
+    </a>
+  </nav>
+
+  <div class="user-actions">
+    <button mat-icon-button matTooltip="Notificações">
+      <mat-icon>notifications</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Configurações">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>

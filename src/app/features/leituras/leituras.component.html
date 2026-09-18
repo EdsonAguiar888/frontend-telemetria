@@ -1,0 +1,249 @@
+
+
+<div class="container">
+  <h2>📊 Leituras & Consumo</h2>
+
+  <mat-card class="card-formulario">
+    <mat-card-header>
+      <mat-card-title>
+        {{ leituraEditandoId ? 'Editar Leitura' : 'Nova Leitura' }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="salvar()" class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Medidor</mat-label>
+          <mat-select [(ngModel)]="novaLeitura.medidorId" name="medidorId" required>
+            <mat-option *ngFor="let m of medidores" [value]="m.id">
+              {{ m.identificador }} ({{ m.tipo }})
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="input-leitura" appearance="outline">
+          <mat-label>Data e Hora</mat-label>
+          <input
+            matInput
+            type="datetime-local"
+            [(ngModel)]="novaLeitura.dataHoraLocal"
+            name="dataHoraLocal"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Valor Lido</mat-label>
+          <input
+            matInput
+            type="number"
+            step="0.01"
+            [(ngModel)]="novaLeitura.valor"
+            name="valor"
+            placeholder="Ex: 150.75"
+            required
+          />
+        </mat-form-field>
+
+        <div class="acoes-form">
+          <button mat-raised-button color="primary" type="submit">
+            {{ leituraEditandoId ? 'Atualizar Leitura' : 'Registrar Leitura' }}
+          </button>
+          <button
+            mat-button
+            type="button"
+            *ngIf="leituraEditandoId"
+            (click)="limparFormulario()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card-tabela">
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="busca">
+        <mat-label>Buscar leitura</mat-label>
+        <input
+          matInput
+          [(ngModel)]="filtro"
+          (keyup)="aplicarFiltro()"
+          placeholder="Filtre por medidor ou valor"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <table mat-table [dataSource]="leiturasFiltradas" class="mat-elevation-z2">
+        <ng-container matColumnDef="dataHora">
+          <th mat-header-cell *matHeaderCellDef>Data / Hora</th>
+          <td mat-cell *matCellDef="let l">
+            {{ l.dataHora | date: 'dd/MM/yyyy HH:mm' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="medidor">
+          <th mat-header-cell *matHeaderCellDef>Medidor</th>
+          <td mat-cell *matCellDef="let l">
+            {{ getIdentificadorMedidor(l.medidorId, l.medidor) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valor">
+          <th mat-header-cell *matHeaderCellDef>Valor Lido</th>
+          <td mat-cell *matCellDef="let l">
+            {{ l.valor | number: '1.2-3' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let l">
+            <button mat-icon-button color="primary" (click)="editar(l)" title="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="excluir(l.id!)" title="Excluir">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-message" colspan="4">
+            Nenhuma leitura encontrada.
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="container">
+  <h2>📊 Leituras & Consumo</h2>
+
+  <mat-card class="card-formulario">
+    <mat-card-header>
+      <mat-card-title>Nova Leitura</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="salvar()" class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Medidor</mat-label>
+          <mat-select [(ngModel)]="novaLeitura.medidorId" name="medidorId" required>
+            <mat-option *ngFor="let m of medidores" [value]="m.id">
+              {{ m.identificador }} ({{ m.tipo }})
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data e Hora</mat-label>
+          <input
+            matInput
+            type="datetime-local"
+            [(ngModel)]="novaLeitura.dataHoraLocal"
+            name="dataHoraLocal"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Valor Lido</mat-label>
+          <input
+            matInput
+            type="number"
+            step="0.01"
+            [(ngModel)]="novaLeitura.valor"
+            name="valor"
+            placeholder="Ex: 150.75"
+            required
+          />
+        </mat-form-field>
+
+        <div class="acoes-form">
+          <button mat-raised-button color="primary" type="submit">
+            Registrar Leitura
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card-tabela">
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="busca">
+        <mat-label>Buscar leitura</mat-label>
+        <input
+          matInput
+          [(ngModel)]="filtro"
+          (keyup)="aplicarFiltro()"
+          placeholder="Filtre por medidor ou valor"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <table mat-table [dataSource]="leiturasFiltradas" class="mat-elevation-z2">
+        <ng-container matColumnDef="dataHora">
+          <th mat-header-cell *matHeaderCellDef>Data / Hora</th>
+          <td mat-cell *matCellDef="let l">
+            {{ l.dataHora | date: 'dd/MM/yyyy HH:mm' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="medidor">
+          <th mat-header-cell *matHeaderCellDef>Medidor</th>
+          <td mat-cell *matCellDef="let l">
+            {{ getIdentificadorMedidor(l.medidorId, l.medidor) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valor">
+          <th mat-header-cell *matHeaderCellDef>Valor Lido</th>
+          <td mat-cell *matCellDef="let l">
+            {{ l.valor | number: '1.2-3' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let l">
+            <button mat-icon-button color="warn" (click)="excluir(l.id!)" title="Excluir">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-message" colspan="4">
+            Nenhuma leitura encontrada.
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div> -->

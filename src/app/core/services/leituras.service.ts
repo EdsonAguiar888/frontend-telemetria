@@ -31,6 +31,10 @@ export class LeiturasService {
     return this.http.post<Leitura>(this.apiUrl, payload);
   }
 
+  atualizar(id: string, leitura: any): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/${id}`, leitura);
+  }
+
   // DELETE /leituras/:id - Exclui uma leitura
   excluir(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);

@@ -6,11 +6,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TopbarComponent } from '../topbar/topbar.component';
+
 
 @Component({
   selector: 'app-layout',
   standalone: true,
   imports: [
+    
+    TopbarComponent,
+
     CommonModule,
     RouterModule,
     MatSidenavModule,
@@ -19,6 +24,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatButtonModule
   ],
+
+
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css']
 })
