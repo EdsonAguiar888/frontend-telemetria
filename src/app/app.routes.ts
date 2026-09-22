@@ -5,6 +5,7 @@ import { LayoutComponent } from './shared/components/layout/layout.component';
 import { ImoveisComponent } from './features/imoveis/imoveis.component';
 import { MedidoresComponent } from './features/medidores/medidores.component';
 import { LeiturasComponent } from './features/leituras/leituras.component';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
 
 export const routes: Routes = [
   {
@@ -14,7 +15,8 @@ export const routes: Routes = [
       { path: '', redirectTo: 'imoveis', pathMatch: 'full' },
       { path: 'imoveis', component: ImoveisComponent },
       { path: 'medidores', component: MedidoresComponent },
-      { path: 'leituras', component: LeiturasComponent }
+      { path: 'leituras', component: LeiturasComponent },
+      { path: 'dashboard', component: DashboardComponent}
     ]
   },
   { path: '**', redirectTo: 'imoveis' }

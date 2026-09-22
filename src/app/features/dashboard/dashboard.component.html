@@ -1,0 +1,689 @@
+<div class="dashboard-container">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="dashboard-header">
+
+    <div class="seletor-imovel">
+
+      <mat-icon>home</mat-icon>
+
+      <select
+        [(ngModel)]="imovelSelecionadoId"
+        (change)="carregarDadosDoImovel()"
+      >
+
+        <option
+          *ngFor="let imovel of imoveis"
+          [value]="imovel.id"
+        >
+
+          {{ imovel.nome }} -
+          {{ imovel.endereco }}
+
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="header-right">
+
+      <button
+        mat-icon-button
+        class="icon-btn"
+      >
+
+        <mat-icon>
+          notifications
+        </mat-icon>
+
+      </button>
+
+
+      <div class="user-badge">
+
+        <div class="avatar">
+          EA
+        </div>
+
+
+        <div class="user-info">
+
+          <!-- <span class="user-name">
+            Edson Aguiar
+          </span>
+
+          <span class="user-role">
+            Usuário
+          </span> -->
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- TÍTULO -->
+  <!-- ===================================================== -->
+
+  <h2 class="section-title">
+    Visão Geral do Consumo
+  </h2>
+
+
+  <!-- ===================================================== -->
+  <!-- GRID PRINCIPAL -->
+  <!-- ===================================================== -->
+
+  <div class="dashboard-grid">
+
+
+    <!-- =================================================== -->
+    <!-- CONTEÚDO PRINCIPAL -->
+    <!-- =================================================== -->
+
+    <div class="main-content-area">
+
+
+      <!-- ================================================= -->
+      <!-- KPIs -->
+      <!-- ================================================= -->
+
+      <div class="cards-grid">
+
+
+        <!-- ÁGUA -->
+
+        <div class="kpi-card agua">
+
+          <div class="kpi-icon">
+
+            <mat-icon>
+              water_drop
+            </mat-icon>
+
+          </div>
+
+
+          <div class="kpi-data">
+
+            <span class="kpi-title">
+              Água
+            </span>
+
+            <span class="kpi-value">
+              {{ kpis.agua.valor }} m³
+            </span>
+
+            <span class="kpi-trend up">
+              ↑ {{ kpis.agua.variacao }}%
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ENERGIA -->
+
+        <div class="kpi-card energia">
+
+          <div class="kpi-icon">
+
+            <mat-icon>
+              bolt
+            </mat-icon>
+
+          </div>
+
+
+          <div class="kpi-data">
+
+            <span class="kpi-title">
+              Energia
+            </span>
+
+            <span class="kpi-value">
+              {{ kpis.energia.valor }} kWh
+            </span>
+
+            <span class="kpi-trend up">
+              ↑ {{ kpis.energia.variacao }}%
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- GÁS -->
+
+        <div class="kpi-card gas">
+
+          <div class="kpi-icon">
+
+            <mat-icon>
+              local_fire_department
+            </mat-icon>
+
+          </div>
+
+
+          <div class="kpi-data">
+
+            <span class="kpi-title">
+              Gás
+            </span>
+
+            <span class="kpi-value">
+              {{ kpis.gas.valor }} m³
+            </span>
+
+            <span class="kpi-trend up">
+              ↑ {{ kpis.gas.variacao }}%
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- GRÁFICO + TABELA -->
+      <!-- ================================================= -->
+
+      <div class="content-split">
+
+
+        <!-- =============================================== -->
+        <!-- GRÁFICO -->
+        <!-- =============================================== -->
+
+        <div class="glass-card chart-card">
+
+          <h3>
+            {{ tituloGrafico }}
+          </h3>
+
+
+          <!-- GRÁFICO -->
+
+          <div
+            *ngIf="
+              chartOptions &&
+              chartOptions.series &&
+              chartOptions.series.length > 0;
+              else semDadosGrafico
+            "
+          >
+
+            <apx-chart
+
+              [series]="chartOptions.series!"
+
+              [chart]="chartOptions.chart!"
+
+              [xaxis]="chartOptions.xaxis!"
+
+              [plotOptions]="chartOptions.plotOptions!"
+
+              [dataLabels]="chartOptions.dataLabels!"
+
+              [grid]="chartOptions.grid!"
+
+              [theme]="chartOptions.theme!"
+
+            >
+            </apx-chart>
+
+          </div>
+
+
+          <!-- SEM DADOS -->
+
+          <ng-template
+            #semDadosGrafico
+          >
+
+            <p
+              style="
+                color: #94a3b8;
+                padding: 3rem;
+                text-align: center;
+              "
+            >
+
+              {{
+                carregando
+                  ? 'Carregando dados...'
+                  : 'Nenhum consumo encontrado para este período.'
+              }}
+
+            </p>
+
+          </ng-template>
+
+
+          <!-- INFORMAÇÃO DO DRILL-DOWN -->
+
+          <div
+            *ngIf="filtroVisao === 'MES'"
+            style="
+              color: #64748b;
+              font-size: 12px;
+              text-align: center;
+              margin-top: 8px;
+            "
+          >
+
+            Clique em um mês para visualizar
+            o consumo diário.
+
+          </div>
+
+
+          <div
+            *ngIf="
+              filtroVisao === 'DIA' &&
+              !diaSelecionado
+            "
+            style="
+              color: #64748b;
+              font-size: 12px;
+              text-align: center;
+              margin-top: 8px;
+            "
+          >
+
+            Clique em um dia para visualizar
+            as leituras daquele dia.
+
+          </div>
+
+        </div>
+
+
+        <!-- =============================================== -->
+        <!-- TABELA -->
+        <!-- =============================================== -->
+
+        <div class="glass-card table-card">
+
+          <h3>
+
+            <span
+              *ngIf="
+                filtroVisao === 'MES'
+              "
+            >
+              Últimas Leituras
+            </span>
+
+
+            <span
+              *ngIf="
+                filtroVisao === 'DIA' &&
+                !diaSelecionado
+              "
+            >
+              Leituras de
+              {{ obterNomeMesPublico() }}
+            </span>
+
+
+            <span
+              *ngIf="
+                filtroVisao === 'DIA' &&
+                diaSelecionado
+              "
+            >
+              Leituras do dia
+              {{ diaSelecionado }}
+            </span>
+
+          </h3>
+
+
+          <table
+            class="dash-table"
+            *ngIf="
+              leiturasDetalhadas.length > 0;
+              else semLeituras
+            "
+          >
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Data
+                </th>
+
+                <th>
+                  Hora
+                </th>
+
+                <th>
+                  Tipo
+                </th>
+
+                <th>
+                  Leitura
+                </th>
+
+                <th>
+                  Consumo
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              <tr
+                *ngFor="
+                  let l of leiturasDetalhadas
+                "
+              >
+
+                <td>
+                  {{ l.data }}
+                </td>
+
+                <td>
+                  {{ l.hora }}
+                </td>
+
+                <td>
+
+                  <strong>
+                    {{ l.tipo }}
+                  </strong>
+
+                </td>
+
+                <td>
+                  {{ l.leitura }}
+                </td>
+
+                <td>
+                  {{ l.consumo }}
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+
+          <!-- SEM LEITURAS -->
+
+          <ng-template
+            #semLeituras
+          >
+
+            <p
+              style="
+                color: #94a3b8;
+                padding: 2rem;
+                text-align: center;
+              "
+            >
+
+              {{
+                carregando
+                  ? 'Carregando leituras...'
+                  : 'Nenhuma leitura encontrada para este período.'
+              }}
+
+            </p>
+
+          </ng-template>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- SIDEBAR -->
+    <!-- =================================================== -->
+
+    <div class="side-panel">
+
+
+      <!-- =============================================== -->
+      <!-- SELETOR DE VISÃO -->
+      <!-- =============================================== -->
+
+      <div class="periodo-selector">
+
+        <button
+          [class.active]="filtroVisao === 'ANO'"
+          (click)="alterarVisao('ANO')"
+        >
+
+          Ano
+
+        </button>
+
+
+        <button
+          [class.active]="filtroVisao === 'MES'"
+          (click)="alterarVisao('MES')"
+        >
+
+          Mês
+
+        </button>
+
+
+        <button
+          [class.active]="filtroVisao === 'DIA'"
+          (click)="alterarVisao('DIA')"
+        >
+
+          Dia
+
+        </button>
+
+      </div>
+
+
+      <!-- =============================================== -->
+      <!-- RESUMO -->
+      <!-- =============================================== -->
+
+      <div class="glass-card resumo-card">
+
+        <div class="card-header-icon">
+
+          <mat-icon>
+            bar_chart
+          </mat-icon>
+
+
+          <div>
+
+            <h4>
+              Resumo Acumulado
+            </h4>
+
+            <small>
+              Ano: {{ anoAtual }}
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="resumo-list">
+
+
+          <!-- ÁGUA -->
+
+          <div class="resumo-item">
+
+            <div class="resumo-icon agua">
+
+              <mat-icon>
+                water_drop
+              </mat-icon>
+
+            </div>
+
+
+            <div class="resumo-info">
+
+              <span>
+                Água
+              </span>
+
+              <small>
+                Total registrado
+              </small>
+
+            </div>
+
+
+            <div class="resumo-value">
+
+              <strong>
+                {{ kpis.agua.valor }} m³
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- ENERGIA -->
+
+          <div class="resumo-item">
+
+            <div class="resumo-icon energia">
+
+              <mat-icon>
+                bolt
+              </mat-icon>
+
+            </div>
+
+
+            <div class="resumo-info">
+
+              <span>
+                Energia
+              </span>
+
+              <small>
+                Total registrado
+              </small>
+
+            </div>
+
+
+            <div class="resumo-value">
+
+              <strong>
+                {{ kpis.energia.valor }} kWh
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- GÁS -->
+
+          <div class="resumo-item">
+
+            <div class="resumo-icon gas">
+
+              <mat-icon>
+                local_fire_department
+              </mat-icon>
+
+            </div>
+
+
+            <div class="resumo-info">
+
+              <span>
+                Gás
+              </span>
+
+              <small>
+                Total registrado
+              </small>
+
+            </div>
+
+
+            <div class="resumo-value">
+
+              <strong>
+                {{ kpis.gas.valor }} m³
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =============================================== -->
+      <!-- STATUS -->
+      <!-- =============================================== -->
+
+      <div class="glass-card sustentavel-card">
+
+        <div class="sustentavel-icon">
+
+          <mat-icon>
+            check_circle
+          </mat-icon>
+
+        </div>
+
+
+        <div>
+
+          <h4>
+            Consumo em Acompanhamento
+          </h4>
+
+          <p>
+            Seus medidores estão monitorando
+            o consumo em tempo real.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

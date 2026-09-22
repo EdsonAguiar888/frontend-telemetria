@@ -1,0 +1,338 @@
+
+
+:host {
+  display: block;
+  background-color: #0b1329;
+  color: #e2e8f0;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.seletor-imovel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.seletor-imovel select {
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.seletor-imovel select option {
+  background-color: #0f172a;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-btn {
+  color: #94a3b8;
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+/* Layout Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main-content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  
+}
+
+
+
+/* Cards KPI Topo */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  
+}
+
+.kpi-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  
+}
+
+.kpi-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agua .kpi-icon { background: rgba(14, 165, 233, 0.2); color: #0ea5e9; }
+.energia .kpi-icon { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+.gas .kpi-icon { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+
+.kpi-data {
+  display: flex;
+  flex-direction: column;
+   
+}
+
+.kpi-title {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.kpi-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.kpi-trend {
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+.kpi-trend.up { color: #22c55e; }
+
+/* Estilos de Cards com Efeito Vidro */
+.glass-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.glass-card h3, .glass-card h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: #f1f5f9;
+}
+
+/* Split Gráfico e Tabela */
+.content-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .content-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tabela Estilizada */
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.dash-table th {
+  text-align: left;
+  color: #64748b;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dash-table td {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+}
+
+/* Painel Lateral */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.periodo-selector {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.periodo-selector button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.periodo-selector button.active {
+  background: #2563eb;
+  color: white;
+  font-weight: bold;
+}
+
+.resumo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.resumo-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resumo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resumo-icon.agua { background: rgba(14, 165, 233, 0.2); color: #0ea5e9; }
+.resumo-icon.energia { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+.resumo-icon.gas { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+
+.resumo-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.resumo-info small { color: #64748b; }
+
+.resumo-value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.sustentavel-card {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+  display: flex;
+  gap: 12px;
+}
+
+.sustentavel-icon { color: #10b981; }
+.sustentavel-card p { font-size: 0.8rem; color: #a7f3d0; margin-top: 4px; }
+
+
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
+
+/* .container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header-acoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.nivel-indicador {
+  font-size: 0.9rem;
+  color: #64748b;
+} */
