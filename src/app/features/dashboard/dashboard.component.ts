@@ -9,7 +9,7 @@ import { NgApexchartsModule, ApexOptions } from 'ng-apexcharts';
 
 import { DashboardService, Imovel, Leitura, Medidor } from '../../core/services/dashboard.service';
 import { forkJoin } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { single, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -334,6 +334,8 @@ export class DashboardComponent implements OnInit {
           0;
 
         return Number(valor);
+
+
       });
 
       return {
@@ -537,50 +539,307 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // PROCESSAR KPIs
-  private processarKPIs(leituras: Leitura[]): void {
-    console.log('==============================');
-    console.log('PROCESSANDO KPIs');
-    console.log('LEITURAS RECEBIDAS:', leituras);
-    console.log('QUANTIDADE:', leituras.length);
-    console.log('==============================');
 
-    const leiturasDoAno = leituras.filter((l) => new Date(l.dataHora).getFullYear() === this.anoAtual);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+private processarKPIs(leituras: Leitura[]): void {
+
+  console.log('==============================');
+  console.log('PROCESSANDO KPIs');
+  console.log('ANO ATUAL:', this.anoAtual);
+  console.log('ANO ANTERIOR:', this.anoAtual - 1);
+  console.log('LEITURAS RECEBIDAS:', leituras.length);
+  console.log('==============================');
+
+
+  // =========================================================
+  // 1. SEPARA AS LEITURAS DO ANO ATUAL
+  // =========================================================
+ 
+  const leiturasAnoAtual = leituras.filter(
+    (l) => new Date(l.dataHora).getFullYear() === this.anoAtual
+  );
+
+
+  // =========================================================
+  // 2. SEPARA AS LEITURAS DO ANO ANTERIOR
+  // =========================================================
+
+  const leiturasAnoAnterior = leituras.filter(
+    (l) => new Date(l.dataHora).getFullYear() === this.anoAtual - 1
+  );
+
+
+  // =========================================================
+  // 3. FUNÇÃO PARA CALCULAR O CONSUMO DE UM ANO
+  // =========================================================
+
+  const calcularConsumo = (
+    leiturasDoAno: Leitura[]
+  ): { agua: number; energia: number; gas: number } => {
 
     let totalAgua = 0;
     let totalEnergia = 0;
     let totalGas = 0;
 
-    this.medidoresDoImovel.forEach((medidor) => {
-      const leiturasMedidor = leiturasDoAno
-        .filter((l) => l.medidor?.id === medidor.id)
-        .sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
 
+    // Percorre os medidores do imóvel
+    this.medidoresDoImovel.forEach((medidor) => {
+
+      // Pega somente as leituras deste medidor
+      const leiturasMedidor = leiturasDoAno
+        .filter((l) => String(l.medidor?.id) === String(medidor.id))
+        .sort(
+          (a, b) =>
+            new Date(a.dataHora).getTime() -
+            new Date(b.dataHora).getTime()
+        );
+
+
+      // Calcula o consumo entre uma leitura e a anterior
       for (let i = 1; i < leiturasMedidor.length; i++) {
+
         const atual = Number(leiturasMedidor[i].valor);
+
         const anterior = Number(leiturasMedidor[i - 1].valor);
+
         const consumo = atual - anterior;
 
-        if (consumo < 0) continue;
 
-        if (medidor.tipo === 'AGUA') totalAgua += consumo;
-        if (medidor.tipo === 'ENERGIA') totalEnergia += consumo;
-        if (medidor.tipo === 'GAS') totalGas += consumo;
+        // Ignora valores negativos
+        // if (consumo < 0) continue;
+
+
+       
+
+
+        // Soma o consumo de acordo com o tipo do medidor
+        if (medidor.tipo === 'AGUA') {
+          totalAgua += consumo;
+        }
+
+        if (medidor.tipo === 'ENERGIA') {
+          totalEnergia += consumo;
+        }
+
+        if (medidor.tipo === 'GAS') {
+          totalGas += consumo;
+        }
       }
     });
 
-    this.kpis = {
-      agua: { valor: totalAgua.toFixed(2).replace('.', ','), variacao: 0 },
-      energia: { valor: totalEnergia.toFixed(2).replace('.', ','), variacao: 0 },
-      gas: { valor: totalGas.toFixed(2).replace('.', ','), variacao: 0 }
-    };
 
-    console.log('==============================');
-    console.log('PROCESSANDO KPIs');
-    console.log('LEITURAS RECEBIDAS:', leituras);
-    console.log('QUANTIDADE:', leituras.length);
-    console.log('==============================');
-  }
+
+
+    return {
+      agua: totalAgua,
+      energia: totalEnergia,
+      gas: totalGas
+    };
+  };
+
+
+  
+
+
+  // =========================================================
+  // 4. CALCULA O CONSUMO DOS DOIS ANOS
+  // =========================================================
+
+  const consumoAtual = calcularConsumo(leiturasAnoAtual);
+
+  const consumoAnterior = calcularConsumo(leiturasAnoAnterior);
+
+
+  console.log('CONSUMO ANO ATUAL:', consumoAtual);
+  console.log('CONSUMO ANO ANTERIOR:', consumoAnterior);
+
+
+    
+
+   
+
+
+  // =========================================================
+  // 5. FUNÇÃO PARA CALCULAR A VARIAÇÃO %
+  //
+  // Fórmula:
+  //
+  // ((anoAtual - anoAnterior) / anoAnterior) * 100
+  // =========================================================
+
+  const calcularVariacao = (
+    atual: number,
+    anterior: number
+  ): number => {
+
+    // Se não existe consumo no ano anterior,
+    // não conseguimos calcular uma comparação percentual.
+    if (anterior === 0) {
+      return 0;
+    }
+
+    return ((anterior - atual) / anterior) * 100;
+  };
+
+
+  // =========================================================
+  // 6. CALCULA AS VARIAÇÕES DE ÁGUA, ENERGIA E GÁS
+  // =========================================================
+
+  const variacaoAgua = calcularVariacao(
+    consumoAtual.agua,
+    consumoAnterior.agua
+  );
+
+  const variacaoEnergia = calcularVariacao(
+    consumoAtual.energia,
+    consumoAnterior.energia
+  );
+
+  const variacaoGas = calcularVariacao(
+    consumoAtual.gas,
+    consumoAnterior.gas
+  );
+
+
+  console.log('VARIAÇÃO ÁGUA:', variacaoAgua);
+  console.log('VARIAÇÃO ENERGIA:', variacaoEnergia);
+  console.log('VARIAÇÃO GÁS:', variacaoGas);
+
+
+  // =========================================================
+  // 7. ALIMENTA OS KPIs DO DASHBOARD
+  // =========================================================
+
+  this.kpis = {
+
+    agua: {
+      valor: consumoAtual.agua
+        .toFixed(2)
+        .replace('.', ','),
+
+      variacao: Number(variacaoAgua.toFixed(2))
+    },
+
+    energia: {
+      valor: consumoAtual.energia
+        .toFixed(2)
+        .replace('.', ','),
+
+      variacao: Number(variacaoEnergia.toFixed(2))
+    },
+
+    gas: {
+      valor: consumoAtual.gas
+        .toFixed(2)
+        .replace('.', ','),
+
+      variacao: Number(variacaoGas.toFixed(2))
+    }
+  };
+
+
+  console.log('==============================');
+  console.log('KPIs FINAIS:', this.kpis);
+  console.log('==============================');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // PROCESSAR KPIs
+  // private processarKPIs(leituras: Leitura[]): void {
+  //   console.log('==============================');
+  //   console.log('PROCESSANDO KPIs');
+  //   console.log('LEITURAS RECEBIDAS:', leituras);
+  //   console.log('QUANTIDADE:', leituras.length);
+  //   console.log('==============================');
+
+  //   const leiturasDoAno = leituras.filter((l) => new Date(l.dataHora).getFullYear() === this.anoAtual);
+
+  //   let totalAgua = 0;
+  //   let totalEnergia = 0;
+  //   let totalGas = 0;
+
+  //   this.medidoresDoImovel.forEach((medidor) => {
+  //     const leiturasMedidor = leiturasDoAno
+  //       .filter((l) => l.medidor?.id === medidor.id)
+  //       .sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+
+  //     for (let i = 1; i < leiturasMedidor.length; i++) {
+  //       const atual = Number(leiturasMedidor[i].valor);
+  //       const anterior = Number(leiturasMedidor[i - 1].valor);
+  //       const consumo = atual - anterior;
+
+  //       if (consumo < 0) continue;
+
+  //       if (medidor.tipo === 'AGUA') totalAgua += consumo;
+  //       if (medidor.tipo === 'ENERGIA') totalEnergia += consumo;
+  //       if (medidor.tipo === 'GAS') totalGas += consumo;
+  //     }
+  //   });
+
+  //   this.kpis = {
+  //     agua: { valor: totalAgua.toFixed(2).replace('.', ','), variacao: 0 },
+  //     energia: { valor: totalEnergia.toFixed(2).replace('.', ','), variacao: 0 },
+  //     gas: { valor: totalGas.toFixed(2).replace('.', ','), variacao: 0 }
+  //   };
+
+  //   console.log('==============================');
+  //   console.log('PROCESSANDO KPIs');
+  //   console.log('LEITURAS RECEBIDAS:', leituras);
+  //   console.log('QUANTIDADE:', leituras.length);
+  //   console.log(this.kpis.agua.valor);
+  //   console.log('==============================');
+  // }
 
   // PROCESSAR TABELA
   private processarTabelaDetalhada(leituras: Leitura[]): void {

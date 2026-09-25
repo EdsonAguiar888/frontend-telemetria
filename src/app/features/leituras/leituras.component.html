@@ -61,10 +61,20 @@
     </mat-card-content>
   </mat-card>
 
+
+
+
+
+
+
+
+
+  <!-- ========================== BUSCA TABELA ======================================================== -->
+
   <mat-card class="card-tabela">
     <mat-card-content>
       <mat-form-field appearance="outline" class="busca">
-        <mat-label>Buscar leitura</mat-label>
+        <mat-label>Buscar</mat-label>
         <input
           matInput
           [(ngModel)]="filtro"
@@ -73,6 +83,99 @@
         />
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
+
+
+<!-- Painel de Filtros Compacto e Alinhado às Colunas -->
+    <div class="filtros-grid" style="display: flex; gap: 12px; margin-bottom: 12px; align-items: center;">
+      
+      
+      
+      <!-- 2. Data Início -->
+    <mat-form-field appearance="outline"  style="flex: 1.5; max-width: 160px;">
+        <mat-label>De</mat-label>
+        <input 
+          matInput 
+          type="date" 
+          [(ngModel)]="dataInicio" 
+          (change)="aplicarFiltro()" 
+        />
+        <button 
+          mat-icon-button 
+          matSuffix 
+          *ngIf="dataInicio" 
+          (click)="dataInicio = ''; aplicarFiltro()">
+          <mat-icon style="font-size: 18px;">clear</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <!-- 3. Data Fim -->
+      <mat-form-field appearance="outline"  style="flex: 1.5; max-width: 160px;">
+        <mat-label>Até</mat-label>
+        <input 
+          matInput 
+          type="date" 
+          [(ngModel)]="dataFim" 
+          (change)="aplicarFiltro()" 
+        />
+        <button 
+          mat-icon-button 
+          matSuffix 
+          *ngIf="dataFim" 
+          (click)="dataFim = ''; aplicarFiltro()">
+          <mat-icon style="font-size: 18px;">clear</mat-icon>
+        </button>
+      </mat-form-field>
+      
+      
+      
+      
+      
+      
+      
+      <!-- 1. Data / Hora (Proporcional à Coluna 1)
+      <mat-form-field  appearance="outline" density="compact" style="flex: 1; max-width: 200px;">
+        <mat-label>Filtrar por Data</mat-label>
+        <input 
+          matInput 
+          type="date" 
+          [(ngModel)]="filtroData" 
+          (change)="aplicarFiltro()" 
+        />
+        <button 
+          mat-icon-button 
+          matSuffix 
+          *ngIf="filtroData" 
+          (click)="filtroData = ''; aplicarFiltro()">
+          <mat-icon style="font-size: 18px;">clear</mat-icon>
+        </button>
+      </mat-form-field> -->
+
+
+
+      <!-- 2. Medidor (Proporcional à Coluna 2) -->
+      <mat-form-field  appearance="outline" style="flex: 1.5; max-width: 180px;">
+        <mat-label>Medidor</mat-label>
+        <mat-select [(ngModel)]="filtroMedidorTexto" (selectionChange)="aplicarFiltro()">
+          <mat-option value="">Todos</mat-option>
+          <mat-option *ngFor="let m of medidores" [value]="m.identificador">
+            {{ m.identificador }} ({{ m.tipo }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- 3. Valor (Proporcional à Coluna 3) -->
+      <mat-form-field appearance="outline" style="flex: 1; max-width: 180px;">
+        <mat-label>Ordem do Valor</mat-label>
+        <mat-select [(ngModel)]="ordemValor" (selectionChange)="aplicarFiltro()">
+          <mat-option value="default">Padrão</mat-option>
+          <mat-option value="asc">Menor → Maior</mat-option>
+          <mat-option value="desc">Maior → Menor</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+      <!-- =========================== TABELA ============================================================ -->
 
       <table mat-table [dataSource]="leiturasFiltradas" class="mat-elevation-z2">
         <ng-container matColumnDef="dataHora">
@@ -117,6 +220,9 @@
           </td>
         </tr>
       </table>
+
+      
+
     </mat-card-content>
   </mat-card>
 </div>

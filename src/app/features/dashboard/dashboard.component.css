@@ -1,15 +1,16 @@
-
-
 :host {
+  
   display: block;
-  background-color: #0b1329;
-  color: #e2e8f0;
-  min-height: 100vh;
+  background-color: #0f172a; /* Alterado de #0b1329 para um Slate Escuro mais moderno */
+  color: #f1f5f9;            /* Alterado de #e2e8f0 para um tom gelo mais limpo */
+  min-height: 130vh;
   padding: 20px;
   font-family: 'Roboto', sans-serif;
 }
 
 .dashboard-container {
+  /* transform: scale(0.9); */
+  /* transform-origin: top left; */
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -26,22 +27,22 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05); /* Suavizado */
   padding: 8px 16px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.08); /* Suavizado */
 }
 
 .seletor-imovel select {
   background: transparent;
-  color: white;
+  color: #f8fafc; /* Alterado para combinar com o novo texto */
   border: none;
   font-size: 0.95rem;
   outline: none;
 }
 
 .seletor-imovel select option {
-  background-color: #0f172a;
+  background-color: #1e293b; /* Alterado de #0f172a para contrastar com o fundo principal */
 }
 
 .header-right {
@@ -84,7 +85,7 @@
 
 .user-role {
   font-size: 0.75rem;
-  color: #64748b;
+  color: #94a3b8; /* Alterado de #64748b para melhor leitura sobre o fundo escuro */
 }
 
 .section-title {
@@ -125,8 +126,8 @@
 }
 
 .kpi-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(30, 41, 59, 0.5); /* Alterado para uma base Slate semitransparente coerente */
+  border: 1px solid rgba(255, 255, 255, 0.05); /* Suavizado */
   border-radius: 12px;
   padding: 16px;
   display: flex;
@@ -144,9 +145,10 @@
   justify-content: center;
 }
 
-.agua .kpi-icon { background: rgba(14, 165, 233, 0.2); color: #0ea5e9; }
-.energia .kpi-icon { background: rgba(234, 179, 8, 0.2); color: #eab308; }
-.gas .kpi-icon { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+/* Cores dos ícones ajustadas para tons neon soft mais visíveis no tema escuro */
+.agua .kpi-icon { background: rgba(14, 165, 233, 0.15); color: #38bdf8; }
+.energia .kpi-icon { background: rgba(234, 179, 8, 0.15); color: #fde047; }
+.gas .kpi-icon { background: rgba(249, 115, 22, 0.15); color: #ff9858; }
 
 .kpi-data {
   display: flex;
@@ -169,12 +171,12 @@
   margin-top: 4px;
 }
 
-.kpi-trend.up { color: #22c55e; }
+.kpi-trend.up { color: #4ade80; } /* Verde alterado para um tom mais suave e moderno */
 
 /* Estilos de Cards com Efeito Vidro */
 .glass-card {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(30, 41, 59, 0.45); /* Alterado para alinhar com a nova paleta escura */
+  border: 1px solid rgba(255, 255, 255, 0.05); /* Suavizado */
   border-radius: 12px;
   padding: 20px;
 }
@@ -183,7 +185,26 @@
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 16px;
-  color: #f1f5f9;
+  color: #ffffff; /* Alterado de #f1f5f9 para branco puro para destacar títulos */
+}
+
+.grafico-card{
+  background-color: #020617; /* Alterado de #00081c para um tom escuro profundo que destaca o gráfico */
+}
+
+.table-leituras{
+  /* background: #111d22; */
+  
+    /* border: 1px solid #ccc; Apenas para visualização */
+}
+
+.conteudo-tabela-leituras {
+  display: block;
+  max-height: 300px;      /* Define a altura máxima antes de rolar (ajuste como quiser) */
+  overflow-y: auto;       /* Ativa a barra de rolagem vertical apenas quando necessário */
+  overflow-x: hidden;     /* Evita barra de rolagem horizontal indesejada */
+  width: 100%;
+  font-size: 10px;
 }
 
 /* Split Gráfico e Tabela */
@@ -203,12 +224,13 @@
 .dash-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.85rem;
+  /* font-size: 0.85rem; */
 }
 
 .dash-table th {
+  width: 100vh;
   text-align: left;
-  color: #64748b;
+  color: #94a3b8; /* Alterado de #64748b para cinza mais claro, melhorando a visibilidade */
   padding-bottom: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -228,7 +250,7 @@
 
 .periodo-selector {
   display: flex;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04); /* Suavizado */
   border-radius: 8px;
   padding: 4px;
 }
@@ -245,7 +267,7 @@
 }
 
 .periodo-selector button.active {
-  background: #2563eb;
+  background: #3b82f6; /* Sincronizado com o azul padrão do avatar */
   color: white;
   font-weight: bold;
 }
@@ -271,9 +293,10 @@
   justify-content: center;
 }
 
-.resumo-icon.agua { background: rgba(14, 165, 233, 0.2); color: #0ea5e9; }
-.resumo-icon.energia { background: rgba(234, 179, 8, 0.2); color: #eab308; }
-.resumo-icon.gas { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+/* Cores sincronizadas com os KPIs superiores */
+.resumo-icon.agua { background: rgba(14, 165, 233, 0.15); color: #38bdf8; }
+.resumo-icon.energia { background: rgba(234, 179, 8, 0.15); color: #fde047; }
+.resumo-icon.gas { background: rgba(249, 115, 22, 0.15); color: #ff9858; }
 
 .resumo-info {
   flex: 1;
@@ -281,7 +304,7 @@
   flex-direction: column;
 }
 
-.resumo-info small { color: #64748b; }
+.resumo-info small { color: #94a3b8; } /* Alterado de #64748b para melhor contraste */
 
 .resumo-value {
   display: flex;
@@ -290,13 +313,13 @@
 }
 
 .sustentavel-card {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.2);
+  background: rgba(16, 185, 129, 0.06); /* Ajustado o brilho do fundo */
+  border-color: rgba(16, 185, 129, 0.15); /* Ajustada a borda */
   display: flex;
   gap: 12px;
 }
 
-.sustentavel-icon { color: #10b981; }
+.sustentavel-icon { color: #34d399; } /* Verde levemente mais vivo */
 .sustentavel-card p { font-size: 0.8rem; color: #a7f3d0; margin-top: 4px; }
 
 

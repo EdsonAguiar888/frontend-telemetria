@@ -10,15 +10,9 @@
 
       <mat-icon>home</mat-icon>
 
-      <select
-        [(ngModel)]="imovelSelecionadoId"
-        (change)="carregarDadosDoImovel()"
-      >
+      <select [(ngModel)]="imovelSelecionadoId" (change)="carregarDadosDoImovel()">
 
-        <option
-          *ngFor="let imovel of imoveis"
-          [value]="imovel.id"
-        >
+        <option *ngFor="let imovel of imoveis" [value]="imovel.id">
 
           {{ imovel.nome }} -
           {{ imovel.endereco }}
@@ -32,10 +26,7 @@
 
     <div class="header-right">
 
-      <button
-        mat-icon-button
-        class="icon-btn"
-      >
+      <button mat-icon-button class="icon-btn">
 
         <mat-icon>
           notifications
@@ -119,13 +110,43 @@
               Água
             </span>
 
-            <span class="kpi-value">
+            <span class="kpi-value">        
               {{ kpis.agua.valor }} m³
             </span>
 
-            <span class="kpi-trend up">
-              ↑ {{ kpis.agua.variacao }}%
+            <span class="kpi-trend"
+              [style.color]="kpis.agua.variacao > 0 ? '#22c55e' : (kpis.agua.variacao < 0 ? '#ef4444' : '#94a3b8')">
+              <mat-icon>{{ kpis.agua.variacao > 0 ? '⇧' : '⇩' }}</mat-icon>
+              {{ kpis.agua.variacao }}%
             </span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- <span class="kpi-trend up">
+              ~ {{ kpis.agua.variacao }}%
+            </span> -->
+            <!-- ↑ {{ kpis.agua.variacao }}% -->
 
           </div>
 
@@ -155,9 +176,14 @@
               {{ kpis.energia.valor }} kWh
             </span>
 
-            <span class="kpi-trend up">
-              ↑ {{ kpis.energia.variacao }}%
+            <span class="kpi-trend"
+              [style.color]="kpis.energia.variacao > 0 ? '#22c55e' : (kpis.energia.variacao < 0 ? '#ef4444' : '#94a3b8')">
+              <mat-icon>{{ kpis.energia.variacao > 0 ? '⇧' : '⇩' }}</mat-icon>
+              {{ kpis.energia.variacao }}%
             </span>
+            <!-- <span class="kpi-trend up">
+              ↑ {{ kpis.energia.variacao }}%
+            </span> -->
 
           </div>
 
@@ -187,9 +213,15 @@
               {{ kpis.gas.valor }} m³
             </span>
 
-            <span class="kpi-trend up">
-              ↑ {{ kpis.gas.variacao }}%
+            <span class="kpi-trend"
+              [style.color]="kpis.gas.variacao > 0 ? '#22c55e' : (kpis.gas.variacao < 0 ? '#ef4444' : '#94a3b8')">
+              <mat-icon>{{ kpis.gas.variacao > 0 ? '⇧' : '⇩' }}</mat-icon>
+              {{ kpis.gas.variacao }}%
             </span>
+
+            <!-- <span class="kpi-trend up">            
+              ↑ {{ kpis.gas.variacao }}%
+            </span> -->
 
           </div>
 
@@ -209,7 +241,7 @@
         <!-- GRÁFICO -->
         <!-- =============================================== -->
 
-        <div class="glass-card chart-card">
+        <div class="glass-card chart-card grafico-card">
 
           <h3>
             {{ tituloGrafico }}
@@ -218,32 +250,16 @@
 
           <!-- GRÁFICO -->
 
-          <div
-            *ngIf="
+          <div *ngIf="
               chartOptions &&
               chartOptions.series &&
               chartOptions.series.length > 0;
               else semDadosGrafico
-            "
-          >
+            ">
 
-            <apx-chart
-
-              [series]="chartOptions.series!"
-
-              [chart]="chartOptions.chart!"
-
-              [xaxis]="chartOptions.xaxis!"
-
-              [plotOptions]="chartOptions.plotOptions!"
-
-              [dataLabels]="chartOptions.dataLabels!"
-
-              [grid]="chartOptions.grid!"
-
-              [theme]="chartOptions.theme!"
-
-            >
+            <apx-chart [series]="chartOptions.series!" [chart]="chartOptions.chart!" [xaxis]="chartOptions.xaxis!"
+              [plotOptions]="chartOptions.plotOptions!" [dataLabels]="chartOptions.dataLabels!"
+              [grid]="chartOptions.grid!" [theme]="chartOptions.theme!">
             </apx-chart>
 
           </div>
@@ -251,22 +267,18 @@
 
           <!-- SEM DADOS -->
 
-          <ng-template
-            #semDadosGrafico
-          >
+          <ng-template #semDadosGrafico>
 
-            <p
-              style="
+            <p style="
                 color: #94a3b8;
                 padding: 3rem;
                 text-align: center;
-              "
-            >
+              ">
 
               {{
-                carregando
-                  ? 'Carregando dados...'
-                  : 'Nenhum consumo encontrado para este período.'
+              carregando
+              ? 'Carregando dados...'
+              : 'Nenhum consumo encontrado para este período.'
               }}
 
             </p>
@@ -276,15 +288,12 @@
 
           <!-- INFORMAÇÃO DO DRILL-DOWN -->
 
-          <div
-            *ngIf="filtroVisao === 'MES'"
-            style="
+          <div *ngIf="filtroVisao === 'MES'" style="
               color: #64748b;
               font-size: 12px;
               text-align: center;
               margin-top: 8px;
-            "
-          >
+            ">
 
             Clique em um mês para visualizar
             o consumo diário.
@@ -292,18 +301,15 @@
           </div>
 
 
-          <div
-            *ngIf="
+          <div *ngIf="
               filtroVisao === 'DIA' &&
               !diaSelecionado
-            "
-            style="
+            " style="
               color: #64748b;
               font-size: 12px;
               text-align: center;
               margin-top: 8px;
-            "
-          >
+            ">
 
             Clique em um dia para visualizar
             as leituras daquele dia.
@@ -317,36 +323,30 @@
         <!-- TABELA -->
         <!-- =============================================== -->
 
-        <div class="glass-card table-card">
+        <div class="glass-card table-card table-leituras">
 
           <h3>
 
-            <span
-              *ngIf="
+            <span *ngIf="
                 filtroVisao === 'MES'
-              "
-            >
+              ">
               Últimas Leituras
             </span>
 
 
-            <span
-              *ngIf="
+            <span *ngIf="
                 filtroVisao === 'DIA' &&
                 !diaSelecionado
-              "
-            >
+              ">
               Leituras de
               {{ obterNomeMesPublico() }}
             </span>
 
 
-            <span
-              *ngIf="
+            <span *ngIf="
                 filtroVisao === 'DIA' &&
                 diaSelecionado
-              "
-            >
+              ">
               Leituras do dia
               {{ diaSelecionado }}
             </span>
@@ -354,13 +354,10 @@
           </h3>
 
 
-          <table
-            class="dash-table"
-            *ngIf="
+          <table class="dash-table conteudo-tabela-leituras" *ngIf="
               leiturasDetalhadas.length > 0;
               else semLeituras
-            "
-          >
+            ">
 
             <thead>
 
@@ -393,11 +390,9 @@
 
             <tbody>
 
-              <tr
-                *ngFor="
+              <tr *ngFor="
                   let l of leiturasDetalhadas
-                "
-              >
+                ">
 
                 <td>
                   {{ l.data }}
@@ -432,22 +427,18 @@
 
           <!-- SEM LEITURAS -->
 
-          <ng-template
-            #semLeituras
-          >
+          <ng-template #semLeituras>
 
-            <p
-              style="
+            <p style="
                 color: #94a3b8;
                 padding: 2rem;
                 text-align: center;
-              "
-            >
+              ">
 
               {{
-                carregando
-                  ? 'Carregando leituras...'
-                  : 'Nenhuma leitura encontrada para este período.'
+              carregando
+              ? 'Carregando leituras...'
+              : 'Nenhuma leitura encontrada para este período.'
               }}
 
             </p>
@@ -474,30 +465,21 @@
 
       <div class="periodo-selector">
 
-        <button
-          [class.active]="filtroVisao === 'ANO'"
-          (click)="alterarVisao('ANO')"
-        >
+        <button [class.active]="filtroVisao === 'ANO'" (click)="alterarVisao('ANO')">
 
           Ano
 
         </button>
 
 
-        <button
-          [class.active]="filtroVisao === 'MES'"
-          (click)="alterarVisao('MES')"
-        >
+        <button [class.active]="filtroVisao === 'MES'" (click)="alterarVisao('MES')">
 
           Mês
 
         </button>
 
 
-        <button
-          [class.active]="filtroVisao === 'DIA'"
-          (click)="alterarVisao('DIA')"
-        >
+        <button [class.active]="filtroVisao === 'DIA'" (click)="alterarVisao('DIA')">
 
           Dia
 
@@ -564,6 +546,40 @@
 
 
             <div class="resumo-value">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
 
               <strong>
                 {{ kpis.agua.valor }} m³

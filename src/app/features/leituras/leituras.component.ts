@@ -91,18 +91,255 @@ export class LeiturasComponent implements OnInit {
     this.novaLeitura.dataHoraLocal = agora.toISOString().slice(0, 16);
   }
 
-  aplicarFiltro(): void {
-    const termo = this.filtro.toLowerCase().trim();
-    if (!termo) {
-      this.leiturasFiltradas = [...this.leituras];
-      return;
+
+
+
+
+
+
+
+
+
+
+// Declaração das variáveis dos filtros
+filtroMedidorTexto: string = '';
+dataInicio: string = ''; // Formato YYYY-MM-DD
+dataFim: string = '';    // Formato YYYY-MM-DD
+ordemValor: 'default' | 'asc' | 'desc' = 'default';
+
+
+aplicarFiltro(): void {
+
+  // Busca geral
+  const buscaGeral = (this.filtro || '').toLowerCase().trim();
+
+  // Busca específica do medidor
+  const buscaMedidor = (this.filtroMedidorTexto || '').toLowerCase().trim();
+
+
+  let resultado = this.leituras.filter((leitura) => {
+
+    // =====================================================
+    // 1. BUSCA GERAL
+    // Procura em qualquer informação da leitura
+    // =====================================================
+
+    const identificadorMedidor =
+      this.getIdentificadorMedidor(
+        leitura.medidorId,
+        leitura.medidor
+      ).toLowerCase();
+
+    const valor = String(leitura.valor ?? '').toLowerCase();
+
+    const dataHora = String(leitura.dataHora ?? '').toLowerCase();
+
+    const textoCompleto =
+      `${identificadorMedidor} ${valor} ${dataHora}`;
+
+
+    const passaBuscaGeral =
+      !buscaGeral ||
+      textoCompleto.includes(buscaGeral);
+
+
+    // =====================================================
+    // 2. FILTRO ESPECÍFICO DO MEDIDOR
+    // =====================================================
+
+    const passaMedidor =
+      !buscaMedidor ||
+      identificadorMedidor.includes(buscaMedidor);
+
+
+    // =====================================================
+    // 3. FILTRO DO INTERVALO DE DATAS
+    // =====================================================
+
+    let passaData = true;
+
+    if (leitura.dataHora) {
+
+      const dataRegistro =
+        new Date(leitura.dataHora)
+          .toISOString()
+          .substring(0, 10);
+
+
+      if (
+        this.dataInicio &&
+        dataRegistro < this.dataInicio
+      ) {
+        passaData = false;
+      }
+
+
+      if (
+        this.dataFim &&
+        dataRegistro > this.dataFim
+      ) {
+        passaData = false;
+      }
     }
-    this.leiturasFiltradas = this.leituras.filter((l) => {
-      const identificador = l.medidor?.identificador?.toLowerCase() || '';
-      const valorStr = l.valor?.toString() || '';
-      return identificador.includes(termo) || valorStr.includes(termo);
-    });
+
+
+    // =====================================================
+    // 4. A LEITURA PRECISA PASSAR POR TODOS OS FILTROS
+    // =====================================================
+
+    return (
+      passaBuscaGeral &&
+      passaMedidor &&
+      passaData
+    );
+  });
+
+
+  // =====================================================
+  // 5. ORDENAÇÃO PELO VALOR
+  // =====================================================
+
+  if (this.ordemValor === 'asc') {
+
+    resultado.sort(
+      (a, b) =>
+        Number(a.valor ?? 0) -
+        Number(b.valor ?? 0)
+    );
+
+  } else if (this.ordemValor === 'desc') {
+
+    resultado.sort(
+      (a, b) =>
+        Number(b.valor ?? 0) -
+        Number(a.valor ?? 0)
+    );
   }
+
+
+  // =====================================================
+  // 6. ATUALIZA A TABELA
+  // =====================================================
+
+  this.leiturasFiltradas = resultado;
+}
+
+
+
+
+
+
+
+// aplicarFiltro(): void {
+
+
+
+
+
+
+
+
+
+
+
+
+//   const buscaMedidor = (this.filtroMedidorTexto || '').toLowerCase().trim();
+
+//   let resultado = this.leituras.filter((leitura) => {
+    
+//     // 1. Filtro do Medidor
+//     const textoMedidor = this.getIdentificadorMedidor(leitura.medidorId, leitura.medidor).toLowerCase();
+//     const passaMedidor = !buscaMedidor || textoMedidor.includes(buscaMedidor);
+
+//     // 2. Filtro do Intervalo de Datas
+//     let passaData = true;
+//     if (leitura.dataHora) {
+//       // Formata a data do registro para YYYY-MM-DD para comparação precisa de dias
+//       const dataRegistro = new Date(leitura.dataHora).toISOString().substring(0, 10);
+
+//       // Se informou 'dataInicio', a data da leitura precisa ser >= dataInicio
+//       if (this.dataInicio && dataRegistro < this.dataInicio) {
+//         passaData = false;
+//       }
+
+//       // Se informou 'dataFim', a data da leitura precisa ser <= dataFim
+//       if (this.dataFim && dataRegistro > this.dataFim) {
+//         passaData = false;
+//       }
+//     }
+
+//     return passaMedidor && passaData;
+//   });
+
+//   // 3. Ordenação do Valor
+//   if (this.ordemValor === 'asc') {
+//     resultado.sort((a, b) => Number(a.valor ?? 0) - Number(b.valor ?? 0));
+//   } else if (this.ordemValor === 'desc') {
+//     resultado.sort((a, b) => Number(b.valor ?? 0) - Number(a.valor ?? 0));
+//   }
+
+//   this.leiturasFiltradas = resultado;
+// }
+
+
+// Variáveis de filtro
+// filtroMedidorTexto: string = '';
+// filtroData: string = '';
+// ordemValor: 'default' | 'asc' | 'desc' = 'default';
+
+// aplicarFiltro(): void {
+//   const buscaMedidor = (this.filtroMedidorTexto || '').toLowerCase().trim();
+
+//   let resultado = this.leituras.filter((leitura) => {
+    
+//     // 1. Filtro do Medidor: busca pelo identificador gerado na tabela
+//     const textoMedidor = this.getIdentificadorMedidor(leitura.medidorId, leitura.medidor).toLowerCase();
+//     const passaMedidor = !buscaMedidor || textoMedidor.includes(buscaMedidor);
+
+//     // 2. Filtro de Data (Dia específico YYYY-MM-DD)
+//     let passaData = true;
+//     if (this.filtroData && leitura.dataHora) {
+//       const dataStr = new Date(leitura.dataHora).toISOString().substring(0, 10);
+//       passaData = dataStr === this.filtroData;
+//     }
+
+//     return passaMedidor && passaData;
+//   });
+
+//   // 3. Ordenação por Valor
+//   if (this.ordemValor === 'asc') {
+//     resultado.sort((a, b) => Number(a.valor ?? 0) - Number(b.valor ?? 0));
+//   } else if (this.ordemValor === 'desc') {
+//     resultado.sort((a, b) => Number(b.valor ?? 0) - Number(a.valor ?? 0));
+//   }
+
+//   this.leiturasFiltradas = resultado;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // aplicarFiltro(): void {
+  //   const termo = this.filtro.toLowerCase().trim();
+  //   if (!termo) {
+  //     this.leiturasFiltradas = [...this.leituras];
+  //     return;
+  //   }
+  //   this.leiturasFiltradas = this.leituras.filter((l) => {
+  //     const identificador = l.medidor?.identificador?.toLowerCase() || '';
+  //     const valorStr = l.valor?.toString() || '';
+  //     return identificador.includes(termo) || valorStr.includes(termo);
+  //   });
+  // }
 
 
 
