@@ -8,7 +8,9 @@ import { ConsumoFiltro, ConsumoItem } from '../models/consumo.model';
   providedIn: 'root'
 })
 export class MedidoresService {
-  private readonly apiUrl = 'http://localhost:3000/medidores';
+
+   private readonly apiUrl = '/api/medidores';
+  // private readonly apiUrl = 'http://localhost:3000/medidores';
 
   constructor(private readonly http: HttpClient) {}
 

@@ -1,0 +1,13 @@
+services:
+  frontend:
+    container_name: container_frontend_telemetria
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - rede_compartilhada
+
+networks:
+  rede_compartilhada:
+    external: true

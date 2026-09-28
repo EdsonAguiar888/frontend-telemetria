@@ -7,7 +7,9 @@ import { Imovel } from '../models/imovel.model';
   providedIn: 'root'
 })
 export class ImoveisService {
-  private readonly apiUrl = 'http://localhost:3000/imoveis';
+
+  private readonly apiUrl = '/api/imoveis';
+  // private readonly apiUrl = 'http://localhost:3000/imoveis';
 
   constructor(private readonly http: HttpClient) {}
 

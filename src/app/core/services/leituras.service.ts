@@ -8,7 +8,9 @@ import { toIsoUtcString } from '../utils/date.utils';
   providedIn: 'root'
 })
 export class LeiturasService {
-  private readonly apiUrl = 'http://localhost:3000/leituras';
+  
+   private readonly apiUrl = '/api/leituras';
+  // private readonly apiUrl = 'http://localhost:3000/leituras';
 
   constructor(private readonly http: HttpClient) {}
 

@@ -28,7 +28,10 @@ export interface Leitura {
   providedIn: 'root'
 })
 export class DashboardService {
-  private readonly apiUrl = 'http://localhost:3000';
+
+   private readonly apiUrl = '/api/';
+  // private readonly apiUrl = 'http://localhost:3000';
+  
 
   constructor(private http: HttpClient) {}
 
