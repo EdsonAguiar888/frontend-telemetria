@@ -33,10 +33,15 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class LayoutComponent {
 
+
+  roleUsuario: 'ADMIN' | 'USUARIO' | null = null
+
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router
-  ) {}
+  ) {
+    this.roleUsuario = this.authService.getRole();
+  }
 
   logout(): void {
     this.authService.logout();
